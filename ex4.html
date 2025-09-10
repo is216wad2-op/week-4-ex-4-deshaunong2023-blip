@@ -1,39 +1,38 @@
-<!-- Wk5 Ex4 solution version 1 -->
+<!-- Wk5 Ex3 solution (without innerHTML) -->
 <html>
 <head>
    <title>Event Handling</title>
 </head>
 
 <body>
+
    <h1>Shopping List</h1>
    <p>Get it done today</p>
-   
    <input id="userinput" onkeypress="addListAfterKeyPress()" type="text" placeholder="enter items">
    <button id="enter" onclick="addListAfterClick()">Enter</button>
-   
    <ul id="myul">
       <li>Notebook
-         <button onclick="removeNode(this.parentNode)">delete</button>  <!-- this.parentNode will be the <li> -->
+         <button onclick="remove(this.parentNode)">delete</button>
       </li>
       <li>Jello
-         <button onclick="removeNode(this.parentNode)">delete</button>
+         <button onclick="remove(this.parentNode)">delete</button>
       </li>
       <li>Spinach
-         <button onclick="removeNode(this.parentNode)">delete</button>
+         <button onclick="remove(this.parentNode)">delete</button>
       </li>
       <li>Rice
-         <button onclick="removeNode(this.parentNode)">delete</button>
+         <button onclick="remove(this.parentNode)">delete</button>
       </li>
       <li>Birthday Cake
-         <button onclick="removeNode(this.parentNode)">delete</button>
+         <button onclick="remove(this.parentNode)">delete</button>
       </li>
       <li>Candles
-         <button onclick="removeNode(this.parentNode)">delete</button>
+         <button onclick="remove(this.parentNode)">delete</button>
       </li>
    </ul>
 
    <script>
-      // event handler for ENTER button
+
       function addListAfterClick() {
          console.log(event);
          let input = document.getElementById("userinput");
@@ -43,7 +42,6 @@
          }
       }
 
-	  // event handler for keypress for INPUT field
       function addListAfterKeyPress() {
          // keycode reference: 
          // https://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
@@ -55,28 +53,38 @@
          console.log(event.keyCode);
 
          let input = document.getElementById("userinput");
-         
-		 // keyCode 13 is the enter key
+         // keyCode 13 is the enter key
          if (input.value.length > 0 && event.keyCode == 13) {
             createNewItem(input);
             input.value = "";
-         } // do nothing if it's not the enter key
+         }
       }
 
-	  // called by addListAfterClick() and addListAfterKeyPress()
-	  // creates new LI node and appends it to the UL
       function createNewItem(item) {
          let ul = document.getElementsByTagName("ul")[0];
          let li = document.createElement("li");
-         li.innerHTML = item.value + " <button onclick='removeNode(this.parentNode)'>delete</button>";
+         let textNode = document.createTextNode(item.value);
+         li.appendChild(textNode);
+
+         let btn = document.createElement("button")
+         textNode = document.createTextNode("delete")
+         btn.appendChild(textNode)
+         btn.addEventListener('click', function() { remove(this.parentNode) })
+         li.appendChild(btn)
+         // can use .innerHTML but it is unsafe
+         // li.innerHTML = item.value + 
+         //    " <button onclick='remove(this.parentNode)'>delete</button>";
          ul.appendChild(li);
       }
 
-	  // delete the node passed into this function.
-	  // All the DELETE buttons are linked to this event handler
-      function removeNode(obj) {
+      function remove(obj) {
          obj.remove();
+         // alternative solution:
+         // let ul = document.getElementById("myul");
+         // ul.removeChild(obj);
       }
    </script>
+
 </body>
+
 </html>
